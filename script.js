@@ -9,62 +9,41 @@ const handleMove = (e) => {
     if (isRevealed) return;
     const x = e.touches ? e.touches[0].pageX : e.pageX;
     const y = e.touches ? e.touches[0].pageY : e.pageY;
-
     circle.style.display = 'block';
-    circle.style.left = x + 'px';
-    circle.style.top = y + 'px';
+    circle.style.left = x + 'px'; circle.style.top = y + 'px';
 
-    // Meme Reveal
     const memeRect = meme.getBoundingClientRect();
-    const distToMeme = Math.hypot(x - (memeRect.left + 65), y - (memeRect.top + 65));
-    meme.style.opacity = (distToMeme < 85) ? "0.9" : "0";
+    const distMeme = Math.hypot(x - (memeRect.left + 65), y - (memeRect.top + 65));
+    meme.style.opacity = (distMeme < 85) ? "0.9" : "0";
 
-    // Moon Collision
     const moonRect = moon.getBoundingClientRect();
-    const distToMoon = Math.hypot(x - (moonRect.left + 40), y - (moonRect.top + 40));
-
-    if (distToMoon < 50) { 
-        triggerTransition();
-    }
+    const distMoon = Math.hypot(x - (moonRect.left + 40), y - (moonRect.top + 40));
+    if (distMoon < 50) triggerTransition();
 };
 
 function triggerTransition() {
     isRevealed = true;
     moon.style.opacity = '1';
     document.getElementById('hint-text').innerText = "Moon Sighted! ✨";
-    
     setTimeout(() => {
         circle.classList.add('portal-zoom');
         setTimeout(() => {
             document.getElementById('phase1').style.display = 'none';
             document.getElementById('phase2').classList.add('active');
-            
             video.play();
-
-            // Next Button logic: Shows after 10 seconds of video playing
             video.onplay = () => {
-                setTimeout(() => {
-                    nextBtn.classList.add('visible');
-                }, 10000); 
+                setTimeout(() => { nextBtn.classList.add('visible'); }, 10000); // 10s Timer
             };
-
-            // Backup trigger if video ends early
-            video.onended = () => {
-                nextBtn.classList.add('visible');
-            };
-
+            video.onended = () => nextBtn.classList.add('visible');
         }, 1300);
     }, 1000);
 }
 
 function goToPhase3() {
     document.getElementById('phase2').classList.remove('active');
-    document.getElementById('phase3').style.display = 'flex';
-    
-    // Trigger CSS animation for the card
-    setTimeout(() => {
-        document.getElementById('phase3').classList.add('active');
-    }, 50);
+    const ph3 = document.getElementById('phase3');
+    ph3.style.display = 'flex';
+    setTimeout(() => { ph3.classList.add('active'); }, 50);
 }
 
 window.addEventListener('mousemove', handleMove);
