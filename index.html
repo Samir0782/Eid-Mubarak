@@ -5,55 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Eid Mubarak 🌙</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-    <style>
-        /* GLOBAL STYLES */
-        * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
-        body { background: #000; height: 100vh; overflow: hidden; font-family: 'Poppins', sans-serif; }
-        .phase { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
-        .phase.active { display: flex; justify-content: center; align-items: center; }
-
-        /* PHASE 1: THE HUNT */
-        #search-area { 
-            width: 100%; height: 100%; position: relative; 
-            background-image: url('starry-night-sky-stockcake.jpg');
-            background-size: cover; background-position: center;
-        }
-        .text-wrapper { position: absolute; top: 12%; width: 100%; display: flex; justify-content: center; z-index: 30; }
-        #hint-text { font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: #fff; text-shadow: 0 0 15px #000; text-align: center; }
-        #reveal-circle {
-            position: absolute; width: 170px; height: 170px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
-            box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.96); transform: translate(-50%, -50%); display: none; z-index: 20;
-        }
-        .portal-zoom { transition: transform 1.5s ease-in, opacity 1s !important; transform: translate(-50%, -50%) scale(40) !important; border: none !important; }
-        .moon-container { position: absolute; top: 30%; left: 65%; width: 80px; height: 80px; opacity: 0; transition: opacity 0.5s; z-index: 5; }
-        .crescent-moon { width: 80px; height: 80px; border-radius: 50%; box-shadow: 15px 15px 0 0 white; transform: rotate(-35deg); filter: drop-shadow(0 0 15px #fff); }
-        #meme-discovery { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 130px; border-radius: 12px; opacity: 0; z-index: 6; transition: opacity 0.2s; }
-
-        /* PHASE 2: VIDEO */
-        .video-container { width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; position: relative; }
-        video { max-width: 100%; max-height: 100%; }
-        #next-btn {
-            position: absolute; bottom: 10%; padding: 12px 35px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.3); color: white; border-radius: 30px; font-family: 'Dancing Script', cursive;
-            font-size: 1.6rem; cursor: pointer; opacity: 0; transition: opacity 1s; pointer-events: none; z-index: 100;
-        }
-        #next-btn.visible { opacity: 1; pointer-events: auto; }
-
-        /* PHASE 3: GLASS CARD */
-        #phase3 { background: radial-gradient(circle at top right, #2c1a4d, #050b14); }
-        .glass-card {
-            width: 85%; max-width: 400px; padding: 40px 20px;
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px;
-            text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            animation: cardUp 1.2s cubic-bezier(0.17, 0.67, 0.83, 0.67) forwards;
-        }
-        @keyframes cardUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
-        .glass-card h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #f7e27c; margin-bottom: 20px; text-shadow: 0 0 20px rgba(247,226,124,0.4); }
-        .glass-card p { font-size: 1.1rem; color: rgba(255,255,255,0.8); line-height: 1.8; margin-bottom: 30px; }
-        .restart-btn { background: none; border: 1px solid #f7e27c; color: #f7e27c; padding: 10px 25px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        .restart-btn:hover { background: #f7e27c; color: #000; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -81,52 +33,6 @@
         </div>
     </div>
 
-    <script>
-        let isRevealed = false;
-        const circle = document.getElementById('reveal-circle');
-        const moon = document.getElementById('moon');
-        const meme = document.getElementById('meme-discovery');
-        const video = document.getElementById('eid-video');
-        const nextBtn = document.getElementById('next-btn');
-
-        const handleMove = (e) => {
-            if (isRevealed) return;
-            const x = e.touches ? e.touches[0].pageX : e.pageX;
-            const y = e.touches ? e.touches[0].pageY : e.pageY;
-            circle.style.display = 'block';
-            circle.style.left = x + 'px'; circle.style.top = y + 'px';
-
-            const memeRect = meme.getBoundingClientRect();
-            const distMeme = Math.hypot(x - (memeRect.left + 65), y - (memeRect.top + 65));
-            meme.style.opacity = (distMeme < 85) ? "0.9" : "0";
-
-            const moonRect = moon.getBoundingClientRect();
-            const distMoon = Math.hypot(x - (moonRect.left + 40), y - (moonRect.top + 40));
-            if (distMoon < 50) triggerTransition();
-        };
-
-        function triggerTransition() {
-            isRevealed = true;
-            moon.style.opacity = '1';
-            document.getElementById('hint-text').innerText = "Moon Sighted! ✨";
-            setTimeout(() => {
-                circle.classList.add('portal-zoom');
-                setTimeout(() => {
-                    document.getElementById('phase1').style.display = 'none';
-                    document.getElementById('phase2').classList.add('active');
-                    video.play();
-                    setTimeout(() => nextBtn.classList.add('visible'), 20000); // 20s Timer
-                }, 1300);
-            }, 1000);
-        }
-
-        function goToPhase3() {
-            document.getElementById('phase2').classList.remove('active');
-            document.getElementById('phase3').classList.add('active');
-        }
-
-        window.addEventListener('mousemove', handleMove);
-        window.addEventListener('touchmove', (e) => { e.preventDefault(); handleMove(e); }, {passive: false});
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
