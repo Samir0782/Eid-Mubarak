@@ -11,16 +11,25 @@
 
     <div id="phase1" class="phase active">
         <div id="search-area">
-            <div class="text-wrapper"><h2 id="hint-text">Search the sky for the moon...</h2></div>
+            <div class="text-wrapper">
+                <h2 id="hint-text">Search the sky for the moon...</h2>
+            </div>
+            
             <div id="reveal-circle"></div>
+
             <img src="8P.jpg" id="meme-discovery">
-            <div class="moon-container" id="moon"><div class="crescent-moon"></div></div>
+            
+            <div class="moon-container" id="moon">
+                <div class="crescent-moon"></div>
+            </div>
         </div>
     </div>
 
     <div id="phase2" class="phase">
         <div class="video-container">
-            <video id="eid-video" playsinline><source src="eid-greeting.mp4" type="video/mp4"></video>
+            <video id="eid-video" playsinline>
+                <source src="eid-greeting.mp4" type="video/mp4">
+            </video>
             <button id="next-btn" onclick="goToPhase3()">Continue ✨</button>
         </div>
     </div>
