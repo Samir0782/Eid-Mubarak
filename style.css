@@ -1,45 +1,44 @@
-/* GLOBAL SETTINGS */
 * { margin: 0; padding: 0; box-sizing: border-box; touch-action: none; }
-body { background: #000; height: 100vh; overflow: hidden; font-family: 'Poppins', sans-serif; }
+body { background: #000; height: 100vh; width: 100vw; overflow: hidden; font-family: 'Poppins', sans-serif; }
 
 .phase { display: none; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
 .phase.active { display: flex; justify-content: center; align-items: center; }
 
-/* --- PHASE 1: OVERLAY & HUNT --- */
+/* --- INSTRUCTION OVERLAY FIX --- */
 #instruction-overlay {
-    position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center;
-    z-index: 100; pointer-events: none;
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center;
+    z-index: 9999; pointer-events: none;
     animation: fadeOutOverlay 1s ease forwards; animation-delay: 4s;
 }
 .overlay-content p {
-    color: white; font-size: 1.1rem; text-align: center; padding: 20px;
+    color: white; font-size: 1.2rem; text-align: center; padding: 25px;
     border: 1px solid rgba(255,255,255,0.2); border-radius: 15px; background: rgba(255,255,255,0.05);
 }
 @keyframes fadeOutOverlay { to { opacity: 0; visibility: hidden; } }
 
+/* --- PHASE 1: FULL SCREEN FIX --- */
 #search-area { 
-    width: 100%; height: 100%; position: relative; 
+    width: 100vw; height: 100vh; position: relative; overflow: hidden;
     background-image: url('starry-night-sky-stockcake.jpg');
-    background-size: cover; background-position: center;
+    background-size: cover; background-position: center; background-repeat: no-repeat;
 }
 .text-wrapper { position: absolute; top: 12%; width: 100%; display: flex; justify-content: center; z-index: 30; }
 #hint-text { font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: #fff; text-shadow: 0 0 15px #000; }
 
 #reveal-circle {
-    position: absolute; width: 170px; height: 170px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
+    position: absolute; width: 180px; height: 180px; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
     box-shadow: 0 0 0 2000px rgba(0, 0, 0, 0.96); transform: translate(-50%, -50%); display: none; z-index: 20;
 }
-.portal-zoom { transition: transform 1.5s ease-in, opacity 1s !important; transform: translate(-50%, -50%) scale(40) !important; border: none !important; }
+.portal-zoom { transition: transform 1.5s ease-in, opacity 1s !important; transform: translate(-50%, -50%) scale(50) !important; border: none !important; }
 
 .moon-container { position: absolute; top: 30%; left: 65%; width: 80px; height: 80px; opacity: 0; transition: opacity 0.5s; z-index: 5; }
 .crescent-moon { width: 80px; height: 80px; border-radius: 50%; box-shadow: 15px 15px 0 0 white; transform: rotate(-35deg); filter: drop-shadow(0 0 15px #fff); }
-#meme-discovery { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 130px; border-radius: 12px; opacity: 0; z-index: 6; transition: opacity 0.2s; }
+#meme-discovery { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 140px; border-radius: 12px; opacity: 0; z-index: 6; transition: opacity 0.2s; }
 
-/* --- PHASE 2: VIDEO & BUTTON --- */
-.video-container { width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; position: relative; }
-video { max-width: 100%; max-height: 100%; }
-
+/* --- PHASE 2: VIDEO --- */
+.video-container { width: 100vw; height: 100vh; background: #000; display: flex; justify-content: center; align-items: center; position: relative; }
+video { width: 100%; height: 100%; object-fit: contain; }
 #next-btn {
     position: absolute; bottom: 12%; padding: 12px 35px;
     background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
@@ -49,23 +48,24 @@ video { max-width: 100%; max-height: 100%; }
 }
 #next-btn.visible { opacity: 1; visibility: visible; pointer-events: auto; }
 
-/* --- PHASE 3: PROPS & GLASS CARD --- */
-#phase3 { background: radial-gradient(circle at top right, #2c1a4d, #050b14); }
-.prop { position: absolute; font-size: 2.5rem; filter: drop-shadow(0 0 10px gold); animation: floatProp 3s ease-in-out infinite; z-index: 5; }
-.prop-left { top: 15%; left: 10%; }
-.prop-right { top: 20%; right: 10%; animation-delay: 1s; }
-.prop-bottom { bottom: 15%; left: 50%; transform: translateX(-50%); animation-delay: 2s; }
+/* --- PHASE 3: TWINKLE & GLASS --- */
+#phase3 { background: radial-gradient(circle at center, #1b2735 0%, #050b14 100%); overflow: hidden; }
 
-@keyframes floatProp { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+.twinkle-stars {
+    position: absolute; width: 100%; height: 100%;
+    background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
+    animation: twinkle 4s ease-in-out infinite; opacity: 0.3;
+}
+@keyframes twinkle { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.7; } }
 
 .glass-card {
-    width: 85%; max-width: 400px; padding: 40px 20px;
-    background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(25px);
-    border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 25px;
-    text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-    opacity: 0; transform: translateY(40px); transition: all 1.2s ease-out;
+    width: 85%; max-width: 400px; padding: 45px 25px;
+    background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 30px;
+    text-align: center; box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+    opacity: 0; transform: translateY(30px); transition: all 1.5s ease-out; z-index: 10;
 }
 #phase3.active .glass-card { opacity: 1; transform: translateY(0); }
-.glass-card h1 { font-family: 'Dancing Script', cursive; font-size: 3.5rem; color: #f7e27c; margin-bottom: 20px; }
-.glass-card p { font-size: 1.1rem; color: rgba(255, 255, 255, 0.85); line-height: 1.8; }
-.signature { font-family: 'Dancing Script', cursive; color: #f7e27c; font-size: 1.8rem; margin-top: 20px; opacity: 0.9; }
+.glass-card h1 { font-family: 'Dancing Script', cursive; font-size: 3.8rem; color: #f7e27c; margin-bottom: 20px; }
+.glass-card p { font-size: 1.15rem; color: rgba(255, 255, 255, 0.85); line-height: 1.8; }
+.signature { font-family: 'Dancing Script', cursive; color: #f7e27c; font-size: 2rem; margin-top: 25px; opacity: 0.9; }
